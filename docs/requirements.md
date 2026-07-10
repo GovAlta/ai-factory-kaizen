@@ -63,5 +63,9 @@ named thresholds as a parameter, fully testable with example values now.]`
 
 - **Given** the service deployed to the sandbox
 - **When** `GET /health` is called against the live sandbox URL
-- **Then** it responds `200 { status: "ok" }` — the walking skeleton's proof that deploy →
-  post-deploy verification is real, not simulated, from epic 1 onward
+- **Then** it responds `200` with the ADSP SDK's platform health-check JSON (`directory`,
+  `tenant`, `access`, `configuration`, `event` booleans) — already provided by
+  `initializeService()` in the generated scaffold, not new code. This is the walking skeleton's
+  proof that deploy → post-deploy verification is real, not simulated, from epic 1 onward, and
+  it's a more meaningful check than a bare `{status:"ok"}` stub would have been: it proves the
+  deployed pod can actually reach ADSP platform services from inside OpenShift.

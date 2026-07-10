@@ -20,10 +20,14 @@ packages/ai-factory-kaizen/src/
   scoring/
     metrics.ts            # computeMetrics(EvalRunResult) -> derived metrics (FR-5)
     score.ts               # scoreAgainstThresholds(EvalRunResult, ParThreshold[]) -> ScoreReportEntry[] (FR-7)
-  routes/
-    health.ts              # GET /health -> 200 { status: "ok" } — the deployable proof
 ```
 
-`example.ts`/`example.spec.ts` from the generator scaffold are removed — they're the generator's
-own placeholder, not this epic's code, and keeping them would be exactly the "duplicated
-substance" this project itself is meant to detect in other harnesses.
+**No new route file** — `GET /health` already exists in the generated `main.ts` via the ADSP
+SDK's `initializeService()`/`healthCheck()`, which checks real platform dependencies (directory,
+tenant, access, configuration, event). This is the walking skeleton's deploy proof; building a
+second, weaker stub endpoint would be exactly the kind of duplicated substance this project
+itself is meant to detect in other harnesses.
+
+`example.ts`/`example.spec.ts`/`events.ts` from the generator scaffold are removed (and their
+wiring in `main.ts`) — they're the generator's own placeholder resource, not this epic's code,
+and no epic yet needs an authenticated API surface.

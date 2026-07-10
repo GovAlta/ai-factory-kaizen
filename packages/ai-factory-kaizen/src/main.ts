@@ -7,37 +7,26 @@ import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
-import passport from 'passport';
-import { Strategy as AnonymousStrategy } from 'passport-anonymous';
 
 import { environment } from './environment';
-import { exampleEventDefinition } from './events';
-import { exampleRouter } from './routes/example';
 
 async function initializeApp() {
   const serviceId = AdspId.parse(environment.CLIENT_ID);
   const capabilities = await initializeService(
     {
       displayName: 'ai-factory-kaizen',
-      description: 'Put your service description here.',
+      description:
+        'Evaluation framework for benchmarking a new AI delivery factory against existing harnesses.',
       serviceId,
       realm: environment.TENANT_REALM,
       clientSecret: environment.CLIENT_SECRET,
       accessServiceUrl: new URL(environment.KEYCLOAK_ROOT_URL),
       directoryUrl: new URL(environment.DIRECTORY_URL),
-      events: [exampleEventDefinition],
     },
     { logLevel: environment.LOG_LEVEL },
   );
 
-  const {
-    logger,
-    tenantStrategy,
-    traceHandler,
-    configurationHandler,
-    healthCheck,
-    eventService,
-  } = capabilities;
+  const { logger, traceHandler, healthCheck } = capabilities;
 
   const app = express();
 
@@ -52,9 +41,10 @@ async function initializeApp() {
 
   app.use(traceHandler);
 
-  passport.use('anonymous', new AnonymousStrategy());
-  passport.use('tenant', tenantStrategy);
-  app.use(passport.initialize());
+  // Epic 1's walking skeleton has no authenticated API surface yet, so the
+  // passport/tenant-strategy wiring and the /ai-factory-kaizen/v1 mount are not
+  // set up here (Article 5 — nothing built ahead of the epic that needs it).
+  // Re-add both via the router recipe in AGENTS.md when a future epic needs one.
 
   app.get('/health', async (_req, res) => {
     const platform = await healthCheck();
@@ -67,25 +57,14 @@ async function initializeApp() {
       _links: {
         self: { href: new URL(req.originalUrl, rootUrl).href },
         health: { href: new URL('/health', rootUrl).href },
-        api: { href: new URL('/ai-factory-kaizen/v1', rootUrl).href },
       },
     });
   });
 
-  // v1 API: authenticate (tenant or anonymous) and resolve tenant configuration
-  // for the whole subtree, then mount the resource routers. Add one router per
-  // resource under routes/ and mount it here — keep handlers out of main.ts.
-  app.use(
-    '/ai-factory-kaizen/v1',
-    passport.authenticate(['tenant', 'anonymous'], { session: false }),
-    configurationHandler,
-    exampleRouter(eventService),
-  );
-
   // Mount error handler last — after all routes and middleware.
   app.use(createErrorHandler(logger));
 
-  return { app, logger, eventService };
+  return { app, logger };
 }
 
 initializeApp()
