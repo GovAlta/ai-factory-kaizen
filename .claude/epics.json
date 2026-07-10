@@ -1,0 +1,54 @@
+{
+  "project": "ai-factory-kaizen",
+  "sandboxProject": "ui-components-build",
+  "registry": "ghcr.io/govalta",
+  "epics": [
+    {
+      "id": "epic-1-walking-skeleton",
+      "title": "Walking skeleton: minimal Express service + EvalRunResult schema + scoring core",
+      "frs": ["FR-1", "FR-5", "FR-7"],
+      "status": "pending",
+      "stage": null
+    },
+    {
+      "id": "epic-2-keystone-adapter",
+      "title": "Keystone adapter, live",
+      "frs": ["FR-2"],
+      "status": "pending",
+      "stage": null,
+      "note": "Scheduled immediately after epic 1 on purpose: first real exercise of the schema."
+    },
+    {
+      "id": "epic-3-tier-b-adapter",
+      "title": "Tier B retrospective adapter",
+      "frs": ["FR-4"],
+      "status": "pending",
+      "stage": null
+    },
+    {
+      "id": "epic-4-report-and-trend",
+      "title": "Report generator + trend persistence",
+      "frs": ["FR-9", "FR-10"],
+      "status": "pending",
+      "stage": null
+    },
+    {
+      "id": "epic-5-judge-panel-and-scorecard",
+      "title": "Judge-panel mechanism + maintainability scorecard",
+      "frs": ["FR-6", "FR-8"],
+      "status": "pending",
+      "stage": null
+    },
+    {
+      "id": "epic-6-benchmark-and-demo",
+      "title": "Benchmark spec fixtures + end-to-end demo",
+      "frs": ["FR-11"],
+      "status": "pending",
+      "stage": null
+    }
+  ],
+  "openClarifications": [
+    "par-threshold values (FR-7)",
+    "judge-panel model/provider (FR-6)"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "adsp-sdk": {
+      "command": "npx",
+      "args": ["-y", "@abgov/adsp-sdk-mcp-server"]
+    }
+  }
+}

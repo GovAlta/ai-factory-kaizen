@@ -1,0 +1,112 @@
+{
+  "name": "ai-factory-kaizen",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/ai-factory-kaizen/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "packages/ai-factory-kaizen/dist",
+        "main": "packages/ai-factory-kaizen/src/main.ts",
+        "tsConfig": "packages/ai-factory-kaizen/tsconfig.app.json",
+        "assets": ["packages/ai-factory-kaizen/src/assets"],
+        "webpackConfig": "packages/ai-factory-kaizen/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "outputHashing": "none"
+        },
+        "production": {}
+      }
+    },
+    "prune-lockfile": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "executor": "@nx/js:prune-lockfile",
+      "outputs": [
+        "{workspaceRoot}/packages/ai-factory-kaizen/dist/package.json",
+        "{workspaceRoot}/packages/ai-factory-kaizen/dist/package-lock.json"
+      ],
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "copy-workspace-modules": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "outputs": [
+        "{workspaceRoot}/packages/ai-factory-kaizen/dist/workspace_modules"
+      ],
+      "executor": "@nx/js:copy-workspace-modules",
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "prune": {
+      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "executor": "nx:noop"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "ai-factory-kaizen:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "ai-factory-kaizen:build:development"
+        },
+        "production": {
+          "buildTarget": "ai-factory-kaizen:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{projectRoot}/test-output/jest/coverage"],
+      "options": {
+        "jestConfig": "packages/ai-factory-kaizen/jest.config.cts",
+        "passWithNoTests": true
+      }
+    },
+    "semgrep": {
+      "executor": "nx:run-commands",
+      "inputs": ["default"],
+      "cache": true,
+      "options": {
+        "command": "semgrep scan --config=p/owasp-top-ten --error .",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "sandbox": {
+      "executor": "@abgov/nx-oc:sandbox",
+      "options": {
+        "sandboxProject": "ui-components-build",
+        "registry": "ghcr.io/govalta",
+        "appType": "node"
+      }
+    },
+    "sandbox-teardown": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "oc delete all,configmap,is -l app=ai-factory-kaizen -n ui-components-build --ignore-not-found",
+          "oc delete imagestream ai-factory-kaizen -n ui-components-build --ignore-not-found",
+          "gh api --method DELETE /orgs/govalta/packages/container/ui-components-build-ai-factory-kaizen 2>/dev/null || true"
+        ]
+      }
+    }
+  }
+}

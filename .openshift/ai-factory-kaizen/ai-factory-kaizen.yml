@@ -1,0 +1,130 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: ai-factory-kaizen
+labels:
+  app: ai-factory-kaizen
+parameters:
+  - name: PROJECT
+    description: Project to deploy into.
+    displayName: Project
+    required: true
+  - name: APP_NAME
+    description: Name of the application.
+    displayName: Application Name
+    value: ai-factory-kaizen
+    required: true
+
+objects:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: ${APP_NAME}
+      namespace: ${PROJECT}
+      labels:
+        reference: 'true'
+    data:
+      TENANT_REALM: 51e22cc3-265a-43c2-ad8a-6ff445d85218
+      ACCESS_SERVICE_URL: https://access.adsp-dev.gov.ab.ca
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: ${APP_NAME}
+      namespace: ${PROJECT}
+
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          name: ${APP_NAME}
+      revisionHistoryLimit: 3
+      progressDeadlineSeconds: 600
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxSurge: 25%
+          maxUnavailable: 25%
+      template:
+        metadata:
+          labels:
+            name: ${APP_NAME}
+        spec:
+          containers:
+            - name: ${APP_NAME}
+
+              image: image-registry.openshift-image-registry.svc:5000/${PROJECT}/ai-factory-kaizen:sandbox
+
+              envFrom:
+                - configMapRef:
+                    name: ${APP_NAME}
+              env:
+                - name: PORT
+                  value: '3333'
+                - name: LOG_LEVEL
+                  value: info
+                # ADSP confidential-client secret the service uses to authenticate
+                # with the access service. Sandbox: created by `nx run <app>:sandbox`
+                # from the service's .env.
+
+                - name: CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP_NAME}-secrets
+                      key: CLIENT_SECRET
+
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 3333
+                  name: http
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: 200m
+                  memory: 200Mi
+                requests:
+                  cpu: 20m
+                  memory: 50Mi
+              readinessProbe:
+                httpGet:
+                  path: /health
+                  port: 3333
+                initialDelaySeconds: 10
+                periodSeconds: 10
+                failureThreshold: 3
+              livenessProbe:
+                httpGet:
+                  path: /health
+                  port: 3333
+                initialDelaySeconds: 30
+                periodSeconds: 30
+                failureThreshold: 3
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${APP_NAME}
+      namespace: ${PROJECT}
+    spec:
+      ports:
+        - name: http
+          port: 3333
+          protocol: TCP
+          targetPort: 3333
+      selector:
+        name: ${APP_NAME}
+      sessionAffinity: None
+      type: ClusterIP
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      name: ${APP_NAME}
+      namespace: ${PROJECT}
+    spec:
+      port:
+        targetPort: http
+      tls:
+        termination: edge
+      to:
+        kind: Service
+        name: ${APP_NAME}
+        weight: 100
+      wildcardPolicy: None
