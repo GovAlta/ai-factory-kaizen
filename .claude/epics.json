@@ -8,7 +8,7 @@
       "title": "Walking skeleton: minimal Express service + EvalRunResult schema + scoring core",
       "frs": ["FR-1", "FR-5", "FR-7"],
       "status": "in-progress",
-      "stage": "spec"
+      "stage": "ship"
     },
     {
       "id": "epic-2-keystone-adapter",
