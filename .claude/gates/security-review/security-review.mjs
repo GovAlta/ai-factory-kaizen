@@ -8,6 +8,18 @@ import { execSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { repoRoot } from '../../lib/project.mjs';
+import { recordStage } from '../../lib/telemetry.mjs';
+
+function epicArg() {
+  const i = process.argv.indexOf('--epic');
+  return i === -1 ? undefined : process.argv[i + 1];
+}
+
+function severityCounts(findings) {
+  const counts = { critical: 0, high: 0, medium: 0, low: 0 };
+  for (const f of findings) counts[f.severity.toLowerCase()] = (counts[f.severity.toLowerCase()] ?? 0) + 1;
+  return counts;
+}
 
 const SECRET_PATTERNS = [
   { re: /-----BEGIN [A-Z ]*PRIVATE KEY-----/, what: 'private key' },
@@ -36,9 +48,15 @@ function scanFile(path, text) {
   return findings;
 }
 
+// Scans the product being shipped, not this harness's own tooling — otherwise the gate's own
+// selftest fixture strings (which deliberately contain the risky pattern, to prove detection
+// works) trip the detector on itself.
 function trackedFiles(root) {
   try {
-    return execSync('git ls-files', { cwd: root, encoding: 'utf8' }).split('\n').filter(Boolean);
+    return execSync('git ls-files', { cwd: root, encoding: 'utf8' })
+      .split('\n')
+      .filter(Boolean)
+      .filter((f) => !f.startsWith('.claude/'));
   } catch {
     return [];
   }
@@ -82,7 +100,16 @@ function selftest() {
 if (process.argv.includes('--selftest')) {
   selftest();
 } else {
+  const startedMs = Date.now();
   const result = runSecurityReview(repoRoot());
+  const epic = epicArg();
+  if (epic) {
+    recordStage(epic, 'security', {
+      passed: result.ok,
+      duration_s: Math.round((Date.now() - startedMs) / 1000),
+      findings: severityCounts(result.findings),
+    });
+  }
   console.log(JSON.stringify(result, null, 2));
   process.exit(result.ok ? 0 : 1);
 }

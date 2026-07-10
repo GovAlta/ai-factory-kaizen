@@ -6,6 +6,12 @@ import { execSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { repoRoot } from '../../lib/project.mjs';
+import { recordCoverage } from '../../lib/telemetry.mjs';
+
+function epicArg() {
+  const i = process.argv.indexOf('--epic');
+  return i === -1 ? undefined : process.argv[i + 1];
+}
 
 const ID_RE = /\b((?:F|NF)R-\d+)\b/g;
 
@@ -73,6 +79,8 @@ if (process.argv.includes('--selftest')) {
   selftest();
 } else {
   const result = checkCoverage(repoRoot());
+  const epic = epicArg();
+  if (epic) recordCoverage(epic, result);
   console.log(JSON.stringify(result, null, 2));
   process.exit(result.ok ? 0 : 1);
 }

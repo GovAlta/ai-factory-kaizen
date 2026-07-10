@@ -11,6 +11,9 @@ articles, cited inline.
 
 ## Spec
 
+0. `node .claude/lib/telemetry-cli.mjs start --epic <epic-id>` — starts this epic's own
+   telemetry record, in the exact `EvalRunResult` shape from `EVALUATION-FRAMEWORK.md` (Article
+   10). This is bookkeeping the *harness* keeps on itself, not part of the product being built.
 1. Load the named epic's FR ids from `.claude/epics.json`. Read `docs/requirements.md`,
    `docs/vocabulary.md`, and `docs/plan.md` (all three are living, cumulative documents — extend
    them, don't rewrite from scratch).

@@ -62,3 +62,14 @@ Every skill and gate here must move one of five concerns — Context, Constraint
 Recovery, Feedback — or it doesn't belong. This harness is deliberately smaller than Keystone's:
 no Tier 0 guard script, no inventory/generator machinery, no color teams or extra deploy
 adapters. Add any of those back only when a real, demonstrated need shows up, not preemptively.
+
+## 10. This harness instruments its own runs, in the product's own schema
+
+Every epic's `verify`/`coverage`/`security-review` results are recorded to
+`.claude/telemetry/<epic-id>.json` in the exact `EvalRunResult` shape defined in
+`EVALUATION-FRAMEWORK.md` (`harness_id: "ai-factory-kaizen-dogfood"`) — moving the Feedback
+concern (Article 9) for this harness's own construction, and giving the scoring engine real test
+data the moment it exists, not synthetic fixtures. `Review` is deliberately excluded from this
+recording, mirroring the schema's own boundary: it's the one judgment stage kept outside the
+closed schema, and blurring that here would corrupt the analogy this instrumentation exists to
+provide.
