@@ -4,14 +4,8 @@
     {
       "criterion": "vocabulary-drift",
       "severity": "MEDIUM",
-      "evidence": "docs/vocabulary.md defines 'ScoreReport' as the canonical term for 'the output of scoring an EvalRunResult against a set of ParThresholds: a list of { threshold, actual, limit, passed }, one entry per threshold' — i.e. the list itself. The diff never defines a type named ScoreReport; only `export interface ScoreReportEntry { threshold, actual, limit, passed }` exists (domain/par-threshold.ts), and score.ts's `scoreAgainstThresholds` returns the bare inline type `ScoreReportEntry[]` rather than a named `ScoreReport` alias. vocabulary.md's own preamble states each listed term 'should, once implemented, correspond to exactly one typed representation in code... so a mismatch is a compile/lint error' — here the canonical term itself has no code symbol, so a future rename of the list shape would not be caught the way the doc promises.",
-      "file": "packages/ai-factory-kaizen/src/domain/par-threshold.ts"
-    },
-    {
-      "criterion": "vocabulary-drift",
-      "severity": "LOW",
-      "evidence": "scoring/metrics.ts introduces `DerivedMetrics` (buildTestPassed, requirementCoveragePercent, securityFindingsBySeverity, cycleTimeSeconds, totalIterations, postDeployVerified) as a new named domain type, but this concept is not listed anywhere in docs/vocabulary.md's Epic 1 term list (EvalRunResult, Contract category, StageResult, RequirementCoverage, OverallResult, ParThreshold, ScoreReport). The field names themselves come straight from FR-5's Given/When/Then in docs/requirements.md, so this is sanctioned by requirements/plan, but vocabulary.md — which states it is 'extended per epic' — was not extended to name this concept, so a reader relying on vocabulary.md alone would not know DerivedMetrics exists.",
-      "file": "packages/ai-factory-kaizen/src/scoring/metrics.ts"
+      "evidence": "docs/vocabulary.md's Epic 2 section defines 'KeystoneAdapter' as a canonical term ('FR-2's instrumentation adapter. Scoped to the scoring half only...'), and the doc's preamble states every term 'should, once implemented, correspond to exactly one typed representation in code (a type, enum, or const)... so a mismatch is a compile/lint error, not something coverage.mjs has to detect after the fact.' The diff adds packages/ai-factory-kaizen/src/adapters/keystone/{types,score,map}.ts but defines no `KeystoneAdapter` type, class, const, or index export anywhere — only two free-standing functions (`runCapabilityScore` in score.ts, `mapKeystoneResult` in map.ts) with no unifying symbol. There is no single compile-checkable representation a reader (or the compiler) can point to as 'the KeystoneAdapter', which is exactly the drift-detection gap vocabulary.md's own governing rule is meant to prevent.",
+      "file": "packages/ai-factory-kaizen/src/adapters/keystone/score.ts"
     }
   ]
 }
