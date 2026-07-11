@@ -21,3 +21,7 @@ export interface ScoreReportEntry {
   limit: number;
   passed: boolean;
 }
+
+// The canonical term from docs/vocabulary.md — a named alias, not just the entry type, so a
+// future change to "the list itself" has one compile-checkable symbol to update.
+export type ScoreReport = ScoreReportEntry[];

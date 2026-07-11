@@ -1,13 +1,13 @@
 // FR-7: score a run against explicit par thresholds — one entry per threshold, never
 // collapsed into a single blended score.
 import type { EvalRunResult } from '../domain/eval-run-result';
-import type { ParThreshold, ScoreReportEntry } from '../domain/par-threshold';
+import type { ParThreshold, ScoreReport } from '../domain/par-threshold';
 import { computeMetrics } from './metrics';
 
 export function scoreAgainstThresholds(
   result: EvalRunResult,
   thresholds: ParThreshold[],
-): ScoreReportEntry[] {
+): ScoreReport {
   const metrics = computeMetrics(result);
   return thresholds.map((threshold) => {
     const actual = threshold.actual(metrics);

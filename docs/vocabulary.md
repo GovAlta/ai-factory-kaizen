@@ -27,3 +27,7 @@ to detect after the fact (the FAC-S4-019 lesson from `AI-ORCHESTRATION-LAYER-DES
   each threshold reports its own pass/fail, never averaged together.
 - **ScoreReport** — the output of scoring an `EvalRunResult` against a set of `ParThreshold`s: a
   list of `{ threshold, actual, limit, passed }`, one entry per threshold.
+- **DerivedMetrics** — the deterministic per-run metrics FR-5 computes from an `EvalRunResult`:
+  `{ buildTestPassed, requirementCoveragePercent, securityFindingsBySeverity, cycleTimeSeconds,
+  totalIterations, postDeployVerified }`. What `ParThreshold.actual` reads from — a `ScoreReport`
+  is always scored against `DerivedMetrics`, never against the raw `EvalRunResult` directly.
