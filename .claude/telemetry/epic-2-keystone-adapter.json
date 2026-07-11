@@ -2,18 +2,67 @@
   "harness_id": "ai-factory-kaizen-dogfood",
   "spec_id": "epic-2-keystone-adapter",
   "timestamp": "2026-07-11T03:52:49.111Z",
-  "stages": {},
+  "stages": {
+    "build/test": {
+      "attempted": 1,
+      "passed": true,
+      "iterations": 1,
+      "duration_s": 1,
+      "findings": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      }
+    },
+    "security": {
+      "attempted": 1,
+      "passed": true,
+      "iterations": 1,
+      "duration_s": 0,
+      "findings": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      }
+    },
+    "deployment": {
+      "attempted": 2,
+      "passed": true,
+      "iterations": 2,
+      "duration_s": 90,
+      "findings": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      }
+    },
+    "post_deploy_verification": {
+      "attempted": 1,
+      "passed": true,
+      "iterations": 1,
+      "duration_s": 1,
+      "findings": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      }
+    }
+  },
   "requirement_coverage": {
-    "total": 0,
-    "traced_to_code": 0,
-    "traced_to_test": 0
+    "total": 4,
+    "traced_to_code": 4,
+    "traced_to_test": 4
   },
   "overall": {
-    "build_passed": null,
-    "security_gate_passed": null,
-    "deployed": null,
-    "post_deploy_verified": null,
-    "cycle_time_s": null,
-    "total_iterations": 0
+    "build_passed": true,
+    "security_gate_passed": true,
+    "deployed": true,
+    "post_deploy_verified": true,
+    "cycle_time_s": 1451,
+    "total_iterations": 5
   }
 }

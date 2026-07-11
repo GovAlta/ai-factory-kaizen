@@ -20,8 +20,8 @@
       "frs": [
         "FR-2"
       ],
-      "status": "in-progress",
-      "stage": "ship",
+      "status": "shipped",
+      "stage": "done",
       "note": "Scheduled immediately after epic 1 on purpose: first real exercise of the schema."
     },
     {
