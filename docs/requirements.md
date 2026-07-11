@@ -139,7 +139,8 @@ Keystone session), not something this epic's code does programmatically.
 - **Then** it contains, per run, the harness id, spec id, timestamp, and its `DerivedMetrics` —
   and is written to `docs/reports/dogfood-self-eval.json` as a real committed JSON artifact.
   No version/history field yet — this report is overwritten on each generation, not appended;
-  trend persistence across generations is FR-9's job (epic 4), not claimed here
+  trend persistence across generations is a later epic's job (see `.claude/epics.json`), not
+  claimed here
 - **Given** zero runs
 - **When** a report is built
 - **Then** it produces a report with an empty `runs` list, not an error
