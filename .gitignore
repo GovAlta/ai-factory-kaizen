@@ -49,3 +49,6 @@ Thumbs.db
 .nx/self-healing
 .nx/migrate-runs
 test-output
+
+# ADSP service client secrets — never committed
+packages/ai-factory-kaizen/.env
