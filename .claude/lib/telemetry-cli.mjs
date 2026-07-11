@@ -34,16 +34,21 @@ if (cmd === 'start') {
   };
   console.log(JSON.stringify(recordStage(epic, category, { passed, duration_s, findings })));
 } else if (cmd === 'finalize') {
-  console.log(
-    JSON.stringify(
-      finalizeRun(epic, {
-        build_passed: bool(arg('build-passed')),
-        security_gate_passed: bool(arg('security-gate-passed')),
-        deployed: bool(arg('deployed')),
-        post_deploy_verified: bool(arg('post-deploy-verified')),
-      })
-    )
-  );
+  // Only include a field if its flag was actually passed — an epic that never attempts
+  // deployment (e.g. no new runtime surface) should stay null ("not attempted"), not be forced
+  // to false ("attempted and failed"). finalizeRun's spread-merge preserves the prior value
+  // (null, from emptyRun) for any field omitted here.
+  const patch = {};
+  for (const [flag, field] of [
+    ['build-passed', 'build_passed'],
+    ['security-gate-passed', 'security_gate_passed'],
+    ['deployed', 'deployed'],
+    ['post-deploy-verified', 'post_deploy_verified'],
+  ]) {
+    const raw = arg(flag);
+    if (raw !== undefined) patch[field] = bool(raw);
+  }
+  console.log(JSON.stringify(finalizeRun(epic, patch)));
 } else {
   console.error(`unknown command: ${cmd}`);
   process.exit(1);
