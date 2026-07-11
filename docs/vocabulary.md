@@ -48,3 +48,13 @@ to detect after the fact (the FAC-S4-019 lesson from `AI-ORCHESTRATION-LAYER-DES
   (`score.mjs` against an already-built app) — the *build* half (fresh harness copy → `/init` →
   `/build` → a builder subagent) inherently needs an agent-in-the-loop and is a separate,
   explicitly-authorized operational step, not code this adapter runs itself.
+
+## Epic 2b
+
+- **DogfoodAdapter** — the identity-case adapter for this harness's own telemetry
+  (`.claude/telemetry/<epic-id>.json`), already `EvalRunResult`-shaped (Article 10). A loader,
+  not a mapper — there is no format to translate.
+- **RunReport** — one run's entry in a `Report`: `{ harness_id, spec_id, timestamp, metrics:
+  DerivedMetrics }`.
+- **Report** — FR-10's minimal shape: `{ generatedAt, runs: RunReport[] }`. Deliberately does not
+  yet persist history across generations — that's FR-9's job, epic 4, not duplicated here.

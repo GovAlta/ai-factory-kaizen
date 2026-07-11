@@ -91,8 +91,9 @@ Keystone session), not something this epic's code does programmatically.
   then 0-1 behavioral check)
 - **When** mapped by the adapter
 - **Then** `stages['build/test']` reflects `checks[0]`, and `stages.security`,
-  `stages.deployment`, `stages.post_deploy_verification` are correctly left `attempted: 0` — an
-  honest reflection that `eval-capability` doesn't exercise those stages at all, not a mapping bug
+  `stages.deployment`, `stages.post_deploy_verification` are correctly left absent (per FR-1's
+  `Partial<Record<...>>` shape) — an honest reflection that `eval-capability` doesn't exercise
+  those stages at all, not a mapping bug
 - **Given** Keystone's real `coverage.mjs --json` output shape (severity-graded `findings`/`counts`,
   total FR count only present inside a `note` string like `"traced app/.ai/requirements.md (12
   req)"`)
@@ -112,3 +113,38 @@ Keystone session), not something this epic's code does programmatically.
 - **Then** `GET /health` still responds `200` against the live sandbox URL — this epic adds no
   new HTTP surface, so the smoke scenario is the same regression check as epic 1's, confirming
   the adapter's addition didn't break the deployed service
+
+## Epic 2b — dogfood self-adapter (not in the original epic list — see `.claude/epics.json`)
+
+### FR-1 / FR-5, exercised against real harness-native data
+
+`.claude/telemetry/<epic-id>.json` is already `EvalRunResult`-shaped (Article 10) — the
+"adapter" here is the identity case: a loader, not a mapper.
+
+- **Given** a real telemetry file this harness already wrote for a shipped epic
+- **When** loaded and validated
+- **Then** it passes `validateEvalRunResult` (FR-1) with no translation — the cheapest possible
+  proof the schema round-trips against a harness that writes to it natively
+- **Given** a telemetry file that fails validation (corrupt or hand-edited incorrectly)
+- **When** loaded
+- **Then** loading fails loud with the validator's specific errors, not a silent partial result
+- **Given** epic 1's and epic 2's real telemetry
+- **When** each is scored by `computeMetrics` (FR-5)
+- **Then** the resulting metrics are real numbers computed from genuine runs, not fixtures
+
+### FR-10 (minimal first cut) — human-readable report per run
+
+- **Given** one or more `EvalRunResult`s
+- **When** a report is built
+- **Then** it contains, per run, the harness id, spec id, timestamp, and its `DerivedMetrics` —
+  and is written to `docs/reports/dogfood-self-eval.json`, a real committed artifact (NFR-4)
+- **Given** zero runs
+- **When** a report is built
+- **Then** it produces a report with an empty `runs` list, not an error
+
+### Post-deploy smoke scenario (epic 2b's own Ship stage)
+
+- **Given** this epic adds no HTTP route and reads only committed, repo-local telemetry files
+- **When** deciding whether to redeploy
+- **Then** no redeploy is needed — there is nothing new for a live pod to serve differently;
+  the report generator runs at dev/build time, not at runtime

@@ -25,6 +25,18 @@
       "note": "Scheduled immediately after epic 1 on purpose: first real exercise of the schema."
     },
     {
+      "id": "epic-2b-dogfood-self-eval",
+      "title": "Dogfood self-adapter: load own telemetry, score it, generate a report",
+      "frs": [
+        "FR-1",
+        "FR-5",
+        "FR-10"
+      ],
+      "status": "in-progress",
+      "stage": "spec",
+      "note": "Not in the original product-brief epic list. Added because the harness's own telemetry (Article 10) is already EvalRunResult-shaped, making this the cheapest real proof that FR-1/FR-5 work against genuine harness-native data, and a minimal first cut of FR-10's report generator. Epic 4 extends this with FR-9 trend persistence and real Tier A/B data rather than duplicating it."
+    },
+    {
       "id": "epic-3-tier-b-adapter",
       "title": "Tier B retrospective adapter",
       "frs": [
@@ -41,7 +53,8 @@
         "FR-10"
       ],
       "status": "pending",
-      "stage": null
+      "stage": null,
+      "note": "FR-10's minimal report shape was already built in epic-2b against dogfood data; this epic extends it with FR-9 trend persistence and wires in real Tier A/B data."
     },
     {
       "id": "epic-5-judge-panel-and-scorecard",

@@ -46,3 +46,21 @@ packages/ai-factory-kaizen/src/adapters/keystone/
 No invocation code for the *build* half (fresh harness copy/`/init`/`/build`/builder subagent) —
 that's a real agent-in-the-loop operation, not something to fake with a subprocess call, and it's
 a separate, explicitly-authorized step per this epic's Spec discussion, not part of this module.
+
+## Epic 2b — dogfood self-adapter
+
+```
+packages/ai-factory-kaizen/src/adapters/dogfood/
+  load.ts    # loadDogfoodRun(epicId, telemetryDir) -> EvalRunResult; reads + validates,
+             #   fails loud on a corrupt file rather than returning a partial result
+packages/ai-factory-kaizen/src/report/
+  build-report.ts     # buildReport(EvalRunResult[], generatedAt) -> Report (FR-10, minimal)
+  generate-dogfood-report.ts   # a small runnable script (`npx tsx <path>`, not an Nx target —
+                                #   no CI/scheduling need yet) that loads epic 1 + epic 2's real
+                                #   telemetry via DogfoodAdapter, builds the report, and writes
+                                #   docs/reports/dogfood-self-eval.json
+```
+
+No markdown output yet (NFR-4 allows either) — JSON matches `EvalRunResult`'s own native format
+and nothing has demonstrated a need for markdown specifically; add it if that changes (Article 5).
+No trend/history persistence across generations — that's FR-9, epic 4, not duplicated here.
