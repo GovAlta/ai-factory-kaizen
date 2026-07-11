@@ -137,7 +137,8 @@ Keystone session), not something this epic's code does programmatically.
 - **Given** one or more `EvalRunResult`s
 - **When** a report is built
 - **Then** it contains, per run, the harness id, spec id, timestamp, and its `DerivedMetrics` —
-  and is written to `docs/reports/dogfood-self-eval.json`, a real committed artifact (NFR-4)
+  and is written to `docs/reports/dogfood-self-eval.json`, a real committed artifact — matching
+  the product brief's report-format NFR (JSON/markdown, versioned)
 - **Given** zero runs
 - **When** a report is built
 - **Then** it produces a report with an empty `runs` list, not an error
