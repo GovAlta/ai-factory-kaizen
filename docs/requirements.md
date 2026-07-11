@@ -137,8 +137,9 @@ Keystone session), not something this epic's code does programmatically.
 - **Given** one or more `EvalRunResult`s
 - **When** a report is built
 - **Then** it contains, per run, the harness id, spec id, timestamp, and its `DerivedMetrics` —
-  and is written to `docs/reports/dogfood-self-eval.json`, a real committed artifact — matching
-  the product brief's report-format NFR (JSON/markdown, versioned)
+  and is written to `docs/reports/dogfood-self-eval.json` as a real committed JSON artifact.
+  No version/history field yet — this report is overwritten on each generation, not appended;
+  trend persistence across generations is FR-9's job (epic 4), not claimed here
 - **Given** zero runs
 - **When** a report is built
 - **Then** it produces a report with an empty `runs` list, not an error
