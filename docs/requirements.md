@@ -59,7 +59,7 @@ named thresholds as a parameter, fully testable with example values now.]`
 - **When** scored
 - **Then** the result is an empty list, not an error and not a default pass
 
-### Post-deploy smoke scenario (this epic's own Ship stage)
+### Post-deploy smoke scenario (epic 1's own Ship stage)
 
 - **Given** the service deployed to the sandbox
 - **When** `GET /health` is called against the live sandbox URL
@@ -69,3 +69,46 @@ named thresholds as a parameter, fully testable with example values now.]`
   proof that deploy → post-deploy verification is real, not simulated, from epic 1 onward, and
   it's a more meaningful check than a bare `{status:"ok"}` stub would have been: it proves the
   deployed pod can actually reach ADSP platform services from inside OpenShift.
+
+## Epic 2 — Keystone adapter, live
+
+### FR-2 — instrumentation adapter for Keystone
+
+The system SHALL provide an instrumentation adapter for Keystone that invokes its existing
+`eval-capability` skill and maps its native output onto the common schema.
+
+**Scope finding, grounded in Keystone's actual source, not assumption**: `/eval-capability`'s
+*build* half (fresh harness copy → `/init` → `/build` → dispatch a builder subagent) inherently
+requires an agent-in-the-loop — no subprocess call automates a judgment step. The adapter's
+honest scope is the *scoring* half: given an already-built app, shell out to Keystone's own
+`score.mjs --root <dir> --task <task.json> --json` (deterministic, safe to automate) and map its
+real output onto `EvalRunResult`. Triggering the build half is a separate, explicitly-authorized
+operational step (this conversation's own agent running `/eval-capability <task-id>` inside a
+Keystone session), not something this epic's code does programmatically.
+
+- **Given** Keystone's real `score.mjs --json` output shape (`{ task, score, checks: [{desc, ok,
+  skipped?}] }`, `checks[0]` = verify, `checks[1]` = coverage, then 0+ structural accept checks,
+  then 0-1 behavioral check)
+- **When** mapped by the adapter
+- **Then** `stages['build/test']` reflects `checks[0]`, and `stages.security`,
+  `stages.deployment`, `stages.post_deploy_verification` are correctly left `attempted: 0` — an
+  honest reflection that `eval-capability` doesn't exercise those stages at all, not a mapping bug
+- **Given** Keystone's real `coverage.mjs --json` output shape (severity-graded `findings`/`counts`,
+  total FR count only present inside a `note` string like `"traced app/.ai/requirements.md (12
+  req)"`)
+- **When** mapped by the adapter
+- **Then** `requirement_coverage.total` is extracted from that note via a documented, tested
+  pattern — and if the note doesn't match the expected format, the adapter reports it as
+  unavailable rather than guessing a number
+- **Given** an already-built Keystone harness copy and a task id
+- **When** the adapter's scorer function is invoked
+- **Then** it shells out via `execFile` with an argument array — never a template string handed to
+  `exec`/`execSync` — the exact risk `security-review`'s subprocess-injection check exists for
+
+### Post-deploy smoke scenario (epic 2's own Ship stage)
+
+- **Given** the walking-skeleton service already deployed to the sandbox
+- **When** the redeploy for this epic completes
+- **Then** `GET /health` still responds `200` against the live sandbox URL — this epic adds no
+  new HTTP surface, so the smoke scenario is the same regression check as epic 1's, confirming
+  the adapter's addition didn't break the deployed service

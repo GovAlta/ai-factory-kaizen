@@ -31,3 +31,20 @@ to detect after the fact (the FAC-S4-019 lesson from `AI-ORCHESTRATION-LAYER-DES
   `{ buildTestPassed, requirementCoveragePercent, securityFindingsBySeverity, cycleTimeSeconds,
   totalIterations, postDeployVerified }`. What `ParThreshold.actual` reads from — a `ScoreReport`
   is always scored against `DerivedMetrics`, never against the raw `EvalRunResult` directly.
+
+## Epic 2
+
+- **KeystoneCapabilityResult** — the raw, real shape of Keystone's own
+  `score.mjs --root <dir> --task <task.json> --json`: `{ task, score, checks: [{ desc, ok,
+  skipped? }] }`. Fixed check order (Keystone's `scoreTask()` invariant, not a convention we
+  impose): index 0 = verify, index 1 = coverage, then 0+ structural accept checks, then 0-1
+  behavioral check.
+- **KeystoneCoverageResult** — the raw, real shape of Keystone's own `coverage.mjs --json`:
+  `{ gate, ok, blocking, counts: { CRITICAL, HIGH, MEDIUM, LOW, INFO }, findings, note, exit }`.
+  Severity-graded findings, not a total/traced count shape — the total FR count is only present
+  inside `note` as free text (`"traced <file> (<N> req)"`), a real limitation of the source data,
+  not of our mapping.
+- **KeystoneAdapter** — FR-2's instrumentation adapter. Scoped to the *scoring* half only
+  (`score.mjs` against an already-built app) — the *build* half (fresh harness copy → `/init` →
+  `/build` → a builder subagent) inherently needs an agent-in-the-loop and is a separate,
+  explicitly-authorized operational step, not code this adapter runs itself.

@@ -31,3 +31,18 @@ itself is meant to detect in other harnesses.
 `example.ts`/`example.spec.ts`/`events.ts` from the generator scaffold are removed (and their
 wiring in `main.ts`) — they're the generator's own placeholder resource, not this epic's code,
 and no epic yet needs an authenticated API surface.
+
+## Epic 2 — Keystone adapter, live
+
+```
+packages/ai-factory-kaizen/src/adapters/keystone/
+  types.ts    # KeystoneCapabilityResult, KeystoneCoverageResult — the raw shapes (FR-2)
+  score.ts     # runCapabilityScore(builtRoot, taskPath) -> KeystoneCapabilityResult; shells out
+               #   to `score.mjs --root <dir> --task <path> --json` via execFile (array args,
+               #   never a template string) — the scoring half only, per FR-2's scope finding
+  map.ts       # mapKeystoneResult(KeystoneCapabilityResult, KeystoneCoverageResult) -> EvalRunResult
+```
+
+No invocation code for the *build* half (fresh harness copy/`/init`/`/build`/builder subagent) —
+that's a real agent-in-the-loop operation, not something to fake with a subprocess call, and it's
+a separate, explicitly-authorized step per this epic's Spec discussion, not part of this module.

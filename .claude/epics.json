@@ -6,45 +6,61 @@
     {
       "id": "epic-1-walking-skeleton",
       "title": "Walking skeleton: minimal Express service + EvalRunResult schema + scoring core",
-      "frs": ["FR-1", "FR-5", "FR-7"],
+      "frs": [
+        "FR-1",
+        "FR-5",
+        "FR-7"
+      ],
       "status": "shipped",
       "stage": "done"
     },
     {
       "id": "epic-2-keystone-adapter",
       "title": "Keystone adapter, live",
-      "frs": ["FR-2"],
-      "status": "pending",
-      "stage": null,
+      "frs": [
+        "FR-2"
+      ],
+      "status": "in-progress",
+      "stage": "spec",
       "note": "Scheduled immediately after epic 1 on purpose: first real exercise of the schema."
     },
     {
       "id": "epic-3-tier-b-adapter",
       "title": "Tier B retrospective adapter",
-      "frs": ["FR-4"],
-      "status": "pending",
-      "stage": null
+      "frs": [
+        "FR-4"
+      ],
+      "status": "in-progress",
+      "stage": "spec"
     },
     {
       "id": "epic-4-report-and-trend",
       "title": "Report generator + trend persistence",
-      "frs": ["FR-9", "FR-10"],
-      "status": "pending",
-      "stage": null
+      "frs": [
+        "FR-9",
+        "FR-10"
+      ],
+      "status": "in-progress",
+      "stage": "spec"
     },
     {
       "id": "epic-5-judge-panel-and-scorecard",
       "title": "Judge-panel mechanism + maintainability scorecard",
-      "frs": ["FR-6", "FR-8"],
-      "status": "pending",
-      "stage": null
+      "frs": [
+        "FR-6",
+        "FR-8"
+      ],
+      "status": "in-progress",
+      "stage": "spec"
     },
     {
       "id": "epic-6-benchmark-and-demo",
       "title": "Benchmark spec fixtures + end-to-end demo",
-      "frs": ["FR-11"],
-      "status": "pending",
-      "stage": null
+      "frs": [
+        "FR-11"
+      ],
+      "status": "in-progress",
+      "stage": "spec"
     }
   ],
   "openClarifications": [
