@@ -30,8 +30,8 @@
       "frs": [
         "FR-4"
       ],
-      "status": "in-progress",
-      "stage": "spec"
+      "status": "pending",
+      "stage": null
     },
     {
       "id": "epic-4-report-and-trend",
@@ -40,8 +40,8 @@
         "FR-9",
         "FR-10"
       ],
-      "status": "in-progress",
-      "stage": "spec"
+      "status": "pending",
+      "stage": null
     },
     {
       "id": "epic-5-judge-panel-and-scorecard",
@@ -50,8 +50,8 @@
         "FR-6",
         "FR-8"
       ],
-      "status": "in-progress",
-      "stage": "spec"
+      "status": "pending",
+      "stage": null
     },
     {
       "id": "epic-6-benchmark-and-demo",
@@ -59,8 +59,8 @@
       "frs": [
         "FR-11"
       ],
-      "status": "in-progress",
-      "stage": "spec"
+      "status": "pending",
+      "stage": null
     }
   ],
   "openClarifications": [
