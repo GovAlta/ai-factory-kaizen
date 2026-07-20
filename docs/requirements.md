@@ -196,3 +196,9 @@ The system SHALL support populating `EvalRunResult` retrospectively for `goa-sof
 - **When** validated
 - **Then** it passes `validateEvalRunResult` like any other `EvalRunResult` — same schema, per
   FR-4's own wording, not a parallel or looser shape
+
+### Post-deploy smoke scenario (epic 3's own Ship stage)
+
+- **Given** this epic adds curated data and a schema amendment, but no new HTTP route
+- **When** deciding whether to redeploy
+- **Then** no redeploy is needed — same reasoning as epic 2b
