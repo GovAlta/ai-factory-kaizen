@@ -42,8 +42,8 @@
       "frs": [
         "FR-4"
       ],
-      "status": "in-progress",
-      "stage": "ship"
+      "status": "shipped",
+      "stage": "done"
     },
     {
       "id": "epic-4-report-and-trend",

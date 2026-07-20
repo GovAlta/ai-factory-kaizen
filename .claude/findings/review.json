@@ -1,23 +1,4 @@
 {
   "criteria": ["vocabulary-drift", "unjustified-complexity", "report-clarity"],
-  "findings": [
-    {
-      "criterion": "report-clarity",
-      "severity": "HIGH",
-      "evidence": "docs/requirements.md's FR-10 scenario was changed from '...a real committed artifact (NFR-4)' to '...a real committed artifact — matching the product brief's report-format NFR (JSON/markdown, versioned)'. NFR-4 in docs/PRODUCT-BRIEF.md reads 'The report format SHALL default to versioned JSON/markdown.' But the actual generated artifact docs/reports/dogfood-self-eval.json, and the Report/RunReport shapes in build-report.ts, contain no version/schemaVersion field at all — just { generatedAt, runs: [...] }. A reader using the requirements doc to judge whether the shipped report satisfies NFR-4 would be told 'versioned' is matched when the artifact itself has nothing that could be checked as a version.",
-      "file": "docs/requirements.md"
-    },
-    {
-      "criterion": "vocabulary-drift",
-      "severity": "MEDIUM",
-      "evidence": "docs/vocabulary.md's Epic 2b section and docs/plan.md name the concept 'DogfoodAdapter' ('the identity-case adapter for this harness's own telemetry'), and load.spec.ts's describe block says 'FR-1: DogfoodAdapter loads and validates its own telemetry...'. But grepping the package for 'DogfoodAdapter' finds it nowhere as an actual exported symbol — load.ts only exports a bare function loadDogfoodRun. This is inconsistent with the sibling KeystoneAdapter, which is materialized as a literal exported const object (packages/ai-factory-kaizen/src/adapters/keystone/index.ts: 'export const KeystoneAdapter = {...}', explicitly justified as 'the single typed representation of docs/vocabulary.md's KeystoneAdapter term'). A future reader grepping the code for the vocabulary term 'DogfoodAdapter' will not find it.",
-      "file": "packages/ai-factory-kaizen/src/adapters/dogfood/load.ts"
-    },
-    {
-      "criterion": "report-clarity",
-      "severity": "LOW",
-      "evidence": "The persisted report mixes naming conventions within the same object: top-level/run fields use snake_case (harness_id, spec_id) while the nested metrics object uses camelCase (buildTestPassed, requirementCoveragePercent, cycleTimeSeconds). E.g. docs/reports/dogfood-self-eval.json has both \"harness_id\": \"ai-factory-kaizen-dogfood\" and \"buildTestPassed\": true in the same run entry. This mirrors the existing EvalRunResult/DerivedMetrics domain split, but surfacing it unchanged in a human-readable report artifact (this diff's stated purpose) makes the file read as two different styles stitched together rather than one coherent report shape.",
-      "file": "packages/ai-factory-kaizen/src/report/build-report.ts"
-    }
-  ]
+  "findings": []
 }
