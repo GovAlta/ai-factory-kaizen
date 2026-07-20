@@ -111,7 +111,7 @@ packages/ai-factory-kaizen/src/judge-panel/
                #   panel of <2 verdicts, ties fail closed
 packages/ai-factory-kaizen/src/scorecard/
   types.ts               # MaintainabilityScorecard, Concern, ProcessAdapterSeparation (FR-8)
-  process-adapter-separation.ts   # checkProcessAdapterSeparation(srcDir) -> ProcessAdapterSeparation;
+  process-adapter-separation.ts   # checkProcessAdapterSeparation(adaptersDir) -> ProcessAdapterSeparation;
                                     #   scans adapters/*/*.ts for EvalRunResult import vs. local
                                     #   redefinition — a real scan of this repo, not a generic claim
 ```

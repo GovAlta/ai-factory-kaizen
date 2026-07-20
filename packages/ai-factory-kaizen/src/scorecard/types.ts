@@ -11,6 +11,8 @@ export interface ProcessAdapterSeparation {
 }
 
 export interface MaintainabilityScorecard {
-  concerns: Partial<Record<Concern, PanelResult>>;
+  // All five required, not Partial — FR-8's own scenario assumes a complete scorecard judges
+  // every one of Keystone's five stated concerns, never a silently-incomplete subset.
+  concerns: Record<Concern, PanelResult>;
   processAdapterSeparation: ProcessAdapterSeparation;
 }

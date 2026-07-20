@@ -21,18 +21,22 @@ function importsEvalRunResultFromDomain(content: string): boolean {
     .some((line) => line.includes('import') && line.includes('EvalRunResult') && line.includes('domain/eval-run-result'));
 }
 
-// dir is a caller-supplied path by design — this function's whole job is to walk an arbitrary
-// directory tree, the same "path is the contract" shape as history.ts's historyPath.
-function listTsFiles(dir: string): string[] {
+// adaptersDir/*/*.ts — a single level under each adapter subdirectory, matching this project's
+// real structure (adapters/keystone/*.ts, adapters/tier-b/*.ts, adapters/dogfood/*.ts, none of
+// which nest further). Not a general recursive tree walker — docs/plan.md scopes this scan to
+// exactly this shape, and a deeper walker would be more machinery than that need warrants.
+function listTsFiles(adaptersDir: string): string[] {
   const files: string[] = [];
   // eslint-disable-next-line security/detect-non-literal-fs-filename
-  for (const entry of readdirSync(dir)) {
-    const full = resolve(dir, entry);
+  for (const adapterName of readdirSync(adaptersDir)) {
+    const adapterDir = resolve(adaptersDir, adapterName);
     // eslint-disable-next-line security/detect-non-literal-fs-filename
-    if (statSync(full).isDirectory()) {
-      files.push(...listTsFiles(full));
-    } else if (entry.endsWith('.ts') && !entry.endsWith('.spec.ts')) {
-      files.push(full);
+    if (!statSync(adapterDir).isDirectory()) continue;
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    for (const entry of readdirSync(adapterDir)) {
+      if (entry.endsWith('.ts') && !entry.endsWith('.spec.ts')) {
+        files.push(resolve(adapterDir, entry));
+      }
     }
   }
   return files;
