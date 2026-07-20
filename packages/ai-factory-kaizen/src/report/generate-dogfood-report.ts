@@ -1,10 +1,14 @@
 // Run from the repo root: `npx tsx packages/ai-factory-kaizen/src/report/generate-dogfood-report.ts`
 // A small runnable script, not an Nx target — no CI/scheduling need yet (docs/plan.md, Epic 2b).
 // Epic 4: also includes the Tier B records (confidence: 'retrospective') alongside dogfood
-// telemetry (confidence: 'live'), and appends the generation to history.json (FR-9).
+// telemetry (confidence: 'live'), and appends the generation to history.json (FR-9). Also
+// includes the real, captured live Keystone run (confidence: 'live') — the deferred Tier A step
+// from epic 2, executed after epic 6 shipped.
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { loadDogfoodRun } from '../adapters/dogfood/load';
+import { CAPTURED_KEYSTONE_RUNS } from '../adapters/keystone/captured-runs';
+import { mapKeystoneResult } from '../adapters/keystone/map';
 import { TIER_B_RECORDS } from '../adapters/tier-b/records';
 import { buildReport, type RunInput } from './build-report';
 import { appendToHistory } from './history';
@@ -33,8 +37,15 @@ function main() {
     result: record.result,
     confidence: 'retrospective',
   }));
+  const keystoneLiveInputs: RunInput[] = CAPTURED_KEYSTONE_RUNS.map((run) => ({
+    result: mapKeystoneResult(run.capability, run.coverage, { timestamp: run.capturedAt }),
+    confidence: 'live',
+  }));
 
-  const report = buildReport([...liveInputs, ...retrospectiveInputs], new Date().toISOString());
+  const report = buildReport(
+    [...liveInputs, ...retrospectiveInputs, ...keystoneLiveInputs],
+    new Date().toISOString(),
+  );
 
   // OUTPUT_PATH/HISTORY_PATH are fixed module-level constants derived from process.cwd(), not
   // external input — the false-positive case this lint rule is known for.
