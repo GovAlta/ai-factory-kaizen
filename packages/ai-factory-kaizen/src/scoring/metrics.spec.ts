@@ -73,8 +73,25 @@ describe('FR-5: deterministic metrics from EvalRunResult', () => {
   it('given a stage is absent from a run, when scored, then it defaults rather than throwing', () => {
     const noSecurity: EvalRunResult = { ...sample, stages: {} };
     const metrics = computeMetrics(noSecurity);
-    expect(metrics.buildTestPassed).toBe(false);
+    // Corrected in epic 4, discovered by generating a real report against real Tier B data:
+    // "no build/test stage present" must stay null ("unmeasured"), not false ("measured, and it
+    // failed") — the exact same unmeasured-vs-failed distinction requirementCoveragePercent and
+    // totalIterations already draw. false previously here silently reported three real Tier B
+    // harnesses as confirmed build failures when the source document says nothing about their
+    // build/test outcome at all.
+    expect(metrics.buildTestPassed).toBeNull();
     expect(metrics.securityFindingsBySeverity).toEqual({ critical: 0, high: 0, medium: 0, low: 0 });
+  });
+
+  it('given a build/test stage that was attempted and genuinely failed, when scored, then buildTestPassed is false, not null — the distinction is real, not just absence', () => {
+    const failedBuild: EvalRunResult = {
+      ...sample,
+      stages: {
+        ...sample.stages,
+        'build/test': { attempted: 1, passed: false, iterations: 1, duration_s: 30, findings: { critical: 0, high: 0, medium: 0, low: 0 } },
+      },
+    };
+    expect(computeMetrics(failedBuild).buildTestPassed).toBe(false);
   });
 
   it('given requirement_coverage is null (epic 3 Tier B, "unmeasured"), when scored, then it does not throw and reports 0%, not a fabricated positive number', () => {

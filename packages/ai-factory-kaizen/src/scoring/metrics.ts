@@ -3,7 +3,10 @@
 import type { EvalRunResult, Findings } from '../domain/eval-run-result';
 
 export interface DerivedMetrics {
-  buildTestPassed: boolean;
+  // null when the build/test stage is absent ("unmeasured") — corrected in epic 4, discovered
+  // against real Tier B data: false previously here misreported three harnesses this source
+  // document says nothing about as confirmed build failures.
+  buildTestPassed: boolean | null;
   // 0 when requirement_coverage is null ("unmeasured") — a documented simplification, not a
   // fabricated positive claim: 0% conservatively fails a minimum-coverage par threshold rather
   // than passing one, the same fail-closed direction as an unmet threshold would take anyway.
@@ -28,7 +31,7 @@ export function computeMetrics(result: EvalRunResult): DerivedMetrics {
     coverage === null || coverage.total === 0 ? 0 : Math.round((coverage.traced_to_test / coverage.total) * 100);
 
   return {
-    buildTestPassed: result.stages['build/test']?.passed ?? false,
+    buildTestPassed: result.stages['build/test']?.passed ?? null,
     requirementCoveragePercent,
     securityFindingsBySeverity: result.stages.security?.findings ?? EMPTY_FINDINGS,
     cycleTimeSeconds: result.overall.cycle_time_s,
