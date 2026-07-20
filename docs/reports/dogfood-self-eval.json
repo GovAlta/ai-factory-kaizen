@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-20T15:20:29.324Z",
+  "generatedAt": "2026-07-20T15:26:54.505Z",
   "confidenceLegend": {
     "live": "Real, observed telemetry from an actual run (this harness's own dogfood runs, or a live Tier A benchmark once that exists).",
     "retrospective": "Evidence-based, hand-curated from documented research (FR-4) — not a direct measurement. Its timestamp is a fixed placeholder, not a real observation instant; only fields cited in the source TierBRecord's evidence are populated, everything else is null (\"unmeasured\")."
@@ -115,6 +115,25 @@
           "low": 0
         },
         "cycleTimeSeconds": 751,
+        "totalIterations": 2,
+        "postDeployVerified": null
+      }
+    },
+    {
+      "harness_id": "ai-factory-kaizen-dogfood",
+      "spec_id": "epic-6-benchmark-and-demo",
+      "timestamp": "2026-07-20T15:17:20.399Z",
+      "confidence": "live",
+      "metrics": {
+        "buildTestPassed": true,
+        "requirementCoveragePercent": 100,
+        "securityFindingsBySeverity": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        },
+        "cycleTimeSeconds": 514,
         "totalIterations": 2,
         "postDeployVerified": null
       }
