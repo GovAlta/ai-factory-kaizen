@@ -220,6 +220,19 @@ data to Tier A in any report." Epic 2b's `RunReport` had no field capturing this
   `'live'` (real, observed), Tier B records are `'retrospective'` (evidence-based, per FR-4) —
   so a reader can never mistake one for the other
 
+**Correction found by generating the real report against real Tier B data (not by inspection
+alone)**: `DerivedMetrics.buildTestPassed` defaulted to `false` when no `build/test` stage was
+present, misreporting all three Tier B harnesses as confirmed build failures — a claim the source
+document never makes. Fixed to `null` ("unmeasured"), the same distinction already drawn for
+`requirementCoveragePercent`/`totalIterations`, applied to the one field that had been missed.
+
+- **Given** a run with no `build/test` stage at all
+- **When** scored
+- **Then** `buildTestPassed` is `null`, not `false`
+- **Given** a run with a `build/test` stage that was attempted and genuinely failed
+- **When** scored
+- **Then** `buildTestPassed` is `false` — the distinction from `null` is real, not collapsed
+
 ### FR-9 — persist EvalRunResult and scorecard data over time, versioned
 
 The system SHALL persist `EvalRunResult` and scorecard data over time, versioned, to support
