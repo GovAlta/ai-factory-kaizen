@@ -4,8 +4,9 @@ import { resolve } from 'node:path';
 import type { Report } from './build-report';
 import { appendToHistory, readHistory } from './history';
 
-const report1: Report = { generatedAt: '2026-01-01T00:00:00.000Z', runs: [] };
-const report2: Report = { generatedAt: '2026-01-02T00:00:00.000Z', runs: [] };
+const confidenceLegend = { live: 'real', retrospective: 'evidence-based, timestamp is a placeholder' };
+const report1: Report = { generatedAt: '2026-01-01T00:00:00.000Z', confidenceLegend, runs: [] };
+const report2: Report = { generatedAt: '2026-01-02T00:00:00.000Z', confidenceLegend, runs: [] };
 
 describe('FR-9: append-only trend history, never a single overwritten snapshot', () => {
   let tmp: string;

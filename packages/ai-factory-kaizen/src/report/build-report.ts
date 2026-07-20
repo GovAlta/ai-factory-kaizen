@@ -27,14 +27,28 @@ export interface RunReport {
   metrics: DerivedMetrics;
 }
 
+// Embedded directly in the artifact, not only in docs/vocabulary.md — a reader inspecting
+// dogfood-self-eval.json cold, without the source tree, must still be able to tell "live" from
+// "retrospective" and know a retrospective entry's timestamp isn't a real observation instant
+// (review finding, epic 4: "retrospective" read as "an older run," not "evidence-based").
+const CONFIDENCE_LEGEND: Record<Confidence, string> = {
+  live: 'Real, observed telemetry from an actual run (this harness\'s own dogfood runs, or a live Tier A benchmark once that exists).',
+  retrospective:
+    'Evidence-based, hand-curated from documented research (FR-4) — not a direct measurement. ' +
+    'Its timestamp is a fixed placeholder, not a real observation instant; only fields cited in ' +
+    'the source TierBRecord\'s evidence are populated, everything else is null ("unmeasured").',
+};
+
 export interface Report {
   generatedAt: string;
+  confidenceLegend: Record<Confidence, string>;
   runs: RunReport[];
 }
 
 export function buildReport(inputs: RunInput[], generatedAt: string): Report {
   return {
     generatedAt,
+    confidenceLegend: CONFIDENCE_LEGEND,
     runs: inputs.map(({ result, confidence }) => ({
       harness_id: result.harness_id,
       spec_id: result.spec_id,

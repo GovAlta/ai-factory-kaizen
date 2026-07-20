@@ -1,5 +1,9 @@
 {
-  "generatedAt": "2026-07-20T14:52:00.067Z",
+  "generatedAt": "2026-07-20T15:01:38.122Z",
+  "confidenceLegend": {
+    "live": "Real, observed telemetry from an actual run (this harness's own dogfood runs, or a live Tier A benchmark once that exists).",
+    "retrospective": "Evidence-based, hand-curated from documented research (FR-4) — not a direct measurement. Its timestamp is a fixed placeholder, not a real observation instant; only fields cited in the source TierBRecord's evidence are populated, everything else is null (\"unmeasured\")."
+  },
   "runs": [
     {
       "harness_id": "ai-factory-kaizen-dogfood",

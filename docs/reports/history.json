@@ -274,5 +274,147 @@
         }
       }
     ]
+  },
+  {
+    "generatedAt": "2026-07-20T15:01:38.122Z",
+    "confidenceLegend": {
+      "live": "Real, observed telemetry from an actual run (this harness's own dogfood runs, or a live Tier A benchmark once that exists).",
+      "retrospective": "Evidence-based, hand-curated from documented research (FR-4) — not a direct measurement. Its timestamp is a fixed placeholder, not a real observation instant; only fields cited in the source TierBRecord's evidence are populated, everything else is null (\"unmeasured\")."
+    },
+    "runs": [
+      {
+        "harness_id": "ai-factory-kaizen-dogfood",
+        "spec_id": "epic-1-walking-skeleton",
+        "timestamp": "2026-07-10T23:49:08.673Z",
+        "confidence": "live",
+        "metrics": {
+          "buildTestPassed": true,
+          "requirementCoveragePercent": 100,
+          "securityFindingsBySeverity": {
+            "critical": 0,
+            "high": 0,
+            "medium": 0,
+            "low": 0
+          },
+          "cycleTimeSeconds": 14500,
+          "totalIterations": 4,
+          "postDeployVerified": true
+        }
+      },
+      {
+        "harness_id": "ai-factory-kaizen-dogfood",
+        "spec_id": "epic-2-keystone-adapter",
+        "timestamp": "2026-07-11T03:52:49.111Z",
+        "confidence": "live",
+        "metrics": {
+          "buildTestPassed": true,
+          "requirementCoveragePercent": 100,
+          "securityFindingsBySeverity": {
+            "critical": 0,
+            "high": 0,
+            "medium": 0,
+            "low": 0
+          },
+          "cycleTimeSeconds": 1451,
+          "totalIterations": 5,
+          "postDeployVerified": true
+        }
+      },
+      {
+        "harness_id": "ai-factory-kaizen-dogfood",
+        "spec_id": "epic-2b-dogfood-self-eval",
+        "timestamp": "2026-07-11T04:22:10.249Z",
+        "confidence": "live",
+        "metrics": {
+          "buildTestPassed": true,
+          "requirementCoveragePercent": 100,
+          "securityFindingsBySeverity": {
+            "critical": 0,
+            "high": 0,
+            "medium": 0,
+            "low": 0
+          },
+          "cycleTimeSeconds": 735,
+          "totalIterations": 3,
+          "postDeployVerified": null
+        }
+      },
+      {
+        "harness_id": "ai-factory-kaizen-dogfood",
+        "spec_id": "epic-3-tier-b-adapter",
+        "timestamp": "2026-07-20T14:29:14.598Z",
+        "confidence": "live",
+        "metrics": {
+          "buildTestPassed": true,
+          "requirementCoveragePercent": 100,
+          "securityFindingsBySeverity": {
+            "critical": 0,
+            "high": 0,
+            "medium": 0,
+            "low": 0
+          },
+          "cycleTimeSeconds": 686,
+          "totalIterations": 2,
+          "postDeployVerified": null
+        }
+      },
+      {
+        "harness_id": "goa-software-factory",
+        "spec_id": "tier-b-retrospective",
+        "timestamp": "2026-01-01T00:00:00.000Z",
+        "confidence": "retrospective",
+        "metrics": {
+          "buildTestPassed": null,
+          "requirementCoveragePercent": 0,
+          "securityFindingsBySeverity": {
+            "critical": 0,
+            "high": 0,
+            "medium": 0,
+            "low": 0
+          },
+          "cycleTimeSeconds": null,
+          "totalIterations": null,
+          "postDeployVerified": null
+        }
+      },
+      {
+        "harness_id": "factory-encore",
+        "spec_id": "tier-b-retrospective",
+        "timestamp": "2026-01-01T00:00:00.000Z",
+        "confidence": "retrospective",
+        "metrics": {
+          "buildTestPassed": null,
+          "requirementCoveragePercent": 0,
+          "securityFindingsBySeverity": {
+            "critical": 0,
+            "high": 0,
+            "medium": 0,
+            "low": 0
+          },
+          "cycleTimeSeconds": null,
+          "totalIterations": null,
+          "postDeployVerified": null
+        }
+      },
+      {
+        "harness_id": "AIDE-VELOCITY-HARNESS",
+        "spec_id": "tier-b-retrospective",
+        "timestamp": "2026-01-01T00:00:00.000Z",
+        "confidence": "retrospective",
+        "metrics": {
+          "buildTestPassed": null,
+          "requirementCoveragePercent": 0,
+          "securityFindingsBySeverity": {
+            "critical": 0,
+            "high": 0,
+            "medium": 0,
+            "low": 0
+          },
+          "cycleTimeSeconds": null,
+          "totalIterations": null,
+          "postDeployVerified": null
+        }
+      }
+    ]
   }
 ]

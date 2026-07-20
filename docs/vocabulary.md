@@ -74,9 +74,16 @@ to detect after the fact (the FAC-S4-019 lesson from `AI-ORCHESTRATION-LAYER-DES
 ## Epic 4
 
 - **Confidence** — `'live' | 'retrospective'`, a new field on `RunReport`. `'live'` means real,
-  observed telemetry (this harness's own dogfood runs); `'retrospective'` means evidence-based
+  observed telemetry — today that's only this harness's own dogfood runs, but the same value
+  will also cover a real Tier A benchmark run once that's integrated (a later epic; not folded in
+  yet, so today `'live'` in practice means dogfood only). `'retrospective'` means evidence-based
   (a `TierBRecord`). Directly operationalizes the product brief's own constraint that Tier B
   "should not be represented as equivalent-confidence data to Tier A in any report."
 - **History** — the append-only log at `docs/reports/history.json`: an array of past `Report`
   generations, oldest first. Never overwritten, never deduplicated — FR-9's trend-persistence
-  mechanism. Distinct from the single-snapshot `Report` file, which stays the latest view.
+  mechanism. Distinct from the single-snapshot `Report` file, which stays the latest view. See
+  `docs/reports/README.md` for the reader-facing explanation of both files.
+- **`Report.confidenceLegend`** — embedded directly in every generated report (not only in this
+  doc), so a reader inspecting the JSON artifact cold, without the source tree, can still tell
+  `'live'` from `'retrospective'` and knows a retrospective entry's timestamp is a placeholder,
+  not a real observation instant (review finding, epic 4).

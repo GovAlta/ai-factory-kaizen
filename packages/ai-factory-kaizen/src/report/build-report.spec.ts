@@ -79,4 +79,13 @@ describe('FR-10: build a human-readable report per run, distinguishing confidenc
     expect(report.runs[1].confidence).toBe('retrospective');
     expect(report.runs[1].harness_id).toBe('goa-software-factory');
   });
+
+  it('given any report, when built, then it is self-documenting — a legend explains what "live" and "retrospective" mean without requiring the reader to find the source code', () => {
+    const report = buildReport([], '2026-01-02T00:00:00.000Z');
+    expect(report.confidenceLegend.live).toMatch(/real|observed/i);
+    expect(report.confidenceLegend.retrospective).toMatch(/evidence|not.*measur/i);
+    // Specifically calls out that a retrospective entry's timestamp isn't a real observation
+    // instant — the exact misread a reviewer flagged (all three Tier B entries share one).
+    expect(report.confidenceLegend.retrospective).toMatch(/timestamp/i);
+  });
 });
