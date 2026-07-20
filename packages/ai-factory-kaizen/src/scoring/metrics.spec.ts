@@ -76,4 +76,15 @@ describe('FR-5: deterministic metrics from EvalRunResult', () => {
     expect(metrics.buildTestPassed).toBe(false);
     expect(metrics.securityFindingsBySeverity).toEqual({ critical: 0, high: 0, medium: 0, low: 0 });
   });
+
+  it('given requirement_coverage is null (epic 3 Tier B, "unmeasured"), when scored, then it does not throw and reports 0%, not a fabricated positive number', () => {
+    const unmeasured: EvalRunResult = { ...sample, requirement_coverage: null };
+    expect(() => computeMetrics(unmeasured)).not.toThrow();
+    expect(computeMetrics(unmeasured).requirementCoveragePercent).toBe(0);
+  });
+
+  it('given overall.total_iterations is null (epic 3 Tier B, "unmeasured"), when scored, then totalIterations stays null, not a fabricated 0', () => {
+    const unmeasured: EvalRunResult = { ...sample, overall: { ...sample.overall, total_iterations: null } };
+    expect(computeMetrics(unmeasured).totalIterations).toBeNull();
+  });
 });

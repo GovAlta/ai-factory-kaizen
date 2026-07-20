@@ -45,7 +45,8 @@ export interface OverallResult {
   deployed: boolean | null;
   post_deploy_verified: boolean | null;
   cycle_time_s: number | null;
-  total_iterations: number;
+  // null means "unmeasured," same rationale as requirement_coverage above (epic 3 amendment).
+  total_iterations: number | null;
 }
 
 export interface EvalRunResult {
@@ -53,7 +54,10 @@ export interface EvalRunResult {
   spec_id: string;
   timestamp: string;
   stages: Partial<Record<ContractCategory, StageResult>>;
-  requirement_coverage: RequirementCoverage;
+  // null means "unmeasured" (e.g. a Tier B retrospective harness this document has no coverage
+  // evidence for) — distinct from { total: 0, ... }, which means "measured, and zero found"
+  // (epic 3's schema amendment; docs/requirements.md).
+  requirement_coverage: RequirementCoverage | null;
   overall: OverallResult;
 }
 
@@ -98,7 +102,9 @@ export function validateEvalRunResult(value: unknown): ValidationResult {
     }
   }
 
-  if (!isRecord(value.requirement_coverage)) {
+  // null is a valid value here ("unmeasured") — reject only if it's neither null nor an object
+  // (covers both "absent entirely" and "present as the wrong type").
+  if (value.requirement_coverage !== null && !isRecord(value.requirement_coverage)) {
     errors.push('missing or invalid field: requirement_coverage');
   }
 

@@ -51,4 +51,17 @@ describe('FR-1: EvalRunResult schema', () => {
     const result = validateEvalRunResult(null);
     expect(result.valid).toBe(false);
   });
+
+  it('given requirement_coverage is null ("unmeasured", epic 3 Tier B), when validated, then it passes — distinct from a missing field', () => {
+    const result = validateEvalRunResult({ ...validRecord, requirement_coverage: null });
+    expect(result.valid).toBe(true);
+  });
+
+  it('given overall.total_iterations is null (epic 3 Tier B), when validated, then it still passes — the validator checks presence of overall, not its inner field types', () => {
+    const result = validateEvalRunResult({
+      ...validRecord,
+      overall: { ...validRecord.overall, total_iterations: null },
+    });
+    expect(result.valid).toBe(true);
+  });
 });
