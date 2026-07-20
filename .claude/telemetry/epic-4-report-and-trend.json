@@ -2,18 +2,43 @@
   "harness_id": "ai-factory-kaizen-dogfood",
   "spec_id": "epic-4-report-and-trend",
   "timestamp": "2026-07-20T14:44:50.469Z",
-  "stages": {},
+  "stages": {
+    "build/test": {
+      "attempted": 1,
+      "passed": true,
+      "iterations": 1,
+      "duration_s": 1,
+      "findings": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      }
+    },
+    "security": {
+      "attempted": 2,
+      "passed": true,
+      "iterations": 2,
+      "duration_s": 0,
+      "findings": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      }
+    }
+  },
   "requirement_coverage": {
-    "total": 0,
-    "traced_to_code": 0,
-    "traced_to_test": 0
+    "total": 7,
+    "traced_to_code": 7,
+    "traced_to_test": 7
   },
   "overall": {
-    "build_passed": null,
-    "security_gate_passed": null,
+    "build_passed": true,
+    "security_gate_passed": true,
     "deployed": null,
     "post_deploy_verified": null,
-    "cycle_time_s": null,
-    "total_iterations": 0
+    "cycle_time_s": 1045,
+    "total_iterations": 3
   }
 }
