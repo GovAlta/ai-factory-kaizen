@@ -18,15 +18,38 @@ const run2: EvalRunResult = {
   overall: { ...run1.overall, cycle_time_s: 1451 },
 };
 
-describe('FR-10 (minimal): build a human-readable report per run', () => {
-  it('given multiple EvalRunResults, when built, then the report has one RunReport per run with real computed metrics', () => {
-    const report = buildReport([run1, run2], '2026-01-02T00:00:00.000Z');
+const retrospectiveRun: EvalRunResult = {
+  harness_id: 'goa-software-factory',
+  spec_id: 'tier-b-retrospective',
+  timestamp: '2026-01-01T00:00:00.000Z',
+  stages: {},
+  requirement_coverage: null,
+  overall: {
+    build_passed: null,
+    security_gate_passed: false,
+    deployed: null,
+    post_deploy_verified: null,
+    cycle_time_s: null,
+    total_iterations: null,
+  },
+};
+
+describe('FR-10: build a human-readable report per run, distinguishing confidence', () => {
+  it('given live runs, when built, then each RunReport has real computed metrics and confidence "live"', () => {
+    const report = buildReport(
+      [
+        { result: run1, confidence: 'live' },
+        { result: run2, confidence: 'live' },
+      ],
+      '2026-01-02T00:00:00.000Z',
+    );
     expect(report.generatedAt).toBe('2026-01-02T00:00:00.000Z');
     expect(report.runs).toHaveLength(2);
     expect(report.runs[0]).toEqual({
       harness_id: 'ai-factory-kaizen-dogfood',
       spec_id: 'epic-1-walking-skeleton',
       timestamp: '2026-01-01T00:00:00.000Z',
+      confidence: 'live',
       metrics: {
         buildTestPassed: true,
         requirementCoveragePercent: 100,
@@ -42,5 +65,18 @@ describe('FR-10 (minimal): build a human-readable report per run', () => {
   it('given zero runs, when built, then it produces a report with an empty runs list, not an error', () => {
     const report = buildReport([], '2026-01-02T00:00:00.000Z');
     expect(report.runs).toEqual([]);
+  });
+
+  it('given a mix of live and retrospective runs, when built, then each keeps its own confidence — never blended or defaulted', () => {
+    const report = buildReport(
+      [
+        { result: run1, confidence: 'live' },
+        { result: retrospectiveRun, confidence: 'retrospective' },
+      ],
+      '2026-01-02T00:00:00.000Z',
+    );
+    expect(report.runs[0].confidence).toBe('live');
+    expect(report.runs[1].confidence).toBe('retrospective');
+    expect(report.runs[1].harness_id).toBe('goa-software-factory');
   });
 });
