@@ -151,3 +151,48 @@ Keystone session), not something this epic's code does programmatically.
 - **When** deciding whether to redeploy
 - **Then** no redeploy is needed — there is nothing new for a live pod to serve differently;
   the report generator runs at dev/build time, not at runtime
+
+## Epic 3 — Tier B retrospective adapter
+
+### Schema amendment (before FR-4): `requirement_coverage` and `total_iterations` become nullable
+
+Grounded in the actual source document (`pronghorn-assessment/11-ai-orchestration-comparison.md`),
+not assumption: it is architectural/process prose, not run-outcome data. It gives real evidence
+for exactly one field — `overall.security_gate_passed` — and no evidence at all for
+`requirement_coverage`, `build_passed`, `deployed`, `post_deploy_verified`, `cycle_time_s`, or
+`total_iterations`. Epic 1 shipped `requirement_coverage` and `total_iterations` as required,
+non-nullable numbers, which forces a dishonest `0` ("zero requirements") where the truth is
+"unmeasured." This is completing FR-1's own stated scope — the product brief always intended two
+population tiers — not scope creep into an unrelated epic (Article 5).
+
+- **Given** a harness with no requirement-coverage evidence at all
+- **When** an `EvalRunResult` is constructed for it
+- **Then** `requirement_coverage` is `null`, not `{ total: 0, ... }` — distinguishing "unmeasured"
+  from "measured and found to be zero"
+- **Given** existing epic 1/2 code that always supplied real `RequirementCoverage` objects
+- **When** the schema changes
+- **Then** `computeMetrics` and `scoreAgainstThresholds` handle a `null` `requirement_coverage`
+  without throwing, and all previously-shipped tests still pass unmodified in their assertions
+
+### FR-4 — Tier B retrospective population
+
+The system SHALL support populating `EvalRunResult` retrospectively for `goa-software-factory`,
+`factory-encore`, and AIDE-VELOCITY-HARNESS from the documented evidence in
+`pronghorn-assessment/11-ai-orchestration-comparison.md`, using the same schema as live-run data.
+
+- **Given** the comparison document's cross-cutting table and per-harness narrative
+- **When** a `TierBRecord` is curated for each of the three harnesses
+- **Then** `overall.security_gate_passed` is set from real, quoted evidence (`false` for
+  `goa-software-factory` — "disconnected, human-invoked, one-shot, never wired into the pipeline";
+  `false` for `factory-encore` — "no Blue/Red at all, 26 grep-able invariants + optional reviewer";
+  `true` for AIDE-VELOCITY-HARNESS — "real, mandatory, gate-blocking /blueteam+/redteam... genuinely
+  wired in"), and every other field this document has no evidence for stays `null`/absent —
+  never guessed
+- **Given** a `TierBRecord`
+- **When** inspected
+- **Then** it carries an `evidence` citation (the exact quoted passage) for every field it
+  populates, and a `sourceDoc` pointer — so a disputed value can be audited back to its source
+- **Given** a curated `TierBRecord`'s `result`
+- **When** validated
+- **Then** it passes `validateEvalRunResult` like any other `EvalRunResult` — same schema, per
+  FR-4's own wording, not a parallel or looser shape

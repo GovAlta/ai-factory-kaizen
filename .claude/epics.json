@@ -42,8 +42,8 @@
       "frs": [
         "FR-4"
       ],
-      "status": "pending",
-      "stage": null
+      "status": "in-progress",
+      "stage": "spec"
     },
     {
       "id": "epic-4-report-and-trend",

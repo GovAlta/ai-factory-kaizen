@@ -64,3 +64,22 @@ packages/ai-factory-kaizen/src/report/
 No markdown output yet (NFR-4 allows either) — JSON matches `EvalRunResult`'s own native format
 and nothing has demonstrated a need for markdown specifically; add it if that changes (Article 5).
 No trend/history persistence across generations — that's FR-9, epic 4, not duplicated here.
+
+## Epic 3 — Tier B retrospective adapter
+
+```
+packages/ai-factory-kaizen/src/domain/
+  eval-run-result.ts   # AMENDED: RequirementCoverage and overall.total_iterations become
+                        #   nullable — completing FR-1's own two-tier scope, not new scope
+packages/ai-factory-kaizen/src/adapters/tier-b/
+  types.ts    # TierBRecord: { result, evidence, sourceDoc }
+  records.ts   # the three curated TierBRecords (goa-software-factory, factory-encore,
+               #   AIDE-VELOCITY-HARNESS), hand-transcribed from the comparison document with a
+               #   quoted citation per populated field — not generated/parsed from prose, since
+               #   turning narrative evidence into structured data is a one-time interpretive
+               #   act, not a repeatable algorithm (unlike Keystone's adapter, which parses
+               #   real machine-generated JSON)
+```
+
+No report integration yet — folding Tier A and Tier B together into one report is epic 6's
+explicit job ("tying Tier A and Tier B together," FR-11), not duplicated here.

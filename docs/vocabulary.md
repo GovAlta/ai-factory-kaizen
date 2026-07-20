@@ -58,3 +58,15 @@ to detect after the fact (the FAC-S4-019 lesson from `AI-ORCHESTRATION-LAYER-DES
   DerivedMetrics }`.
 - **Report** — FR-10's minimal shape: `{ generatedAt, runs: RunReport[] }`. Deliberately does not
   yet persist history across generations — that's FR-9's job, epic 4, not duplicated here.
+
+## Epic 3
+
+- **RequirementCoverage (amended)** — now `{ total, traced_to_code, traced_to_test } | null`.
+  `null` means "unmeasured," never conflated with `{ total: 0, ... }` ("measured, zero found").
+  `overall.total_iterations` is amended the same way: `number | null`.
+- **TierBRecord** — `{ result: EvalRunResult, evidence: Record<string, string>, sourceDoc:
+  string }`. The retrospective counterpart to a live adapter's output: `result` uses the exact
+  same `EvalRunResult` schema (FR-4's own wording), but every populated field carries a quoted
+  citation in `evidence`, keyed by field path (e.g. `"overall.security_gate_passed"`), so a
+  disputed value audits back to the source document rather than resting on an unstated judgment
+  call.
