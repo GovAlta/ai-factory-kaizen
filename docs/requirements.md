@@ -202,3 +202,43 @@ The system SHALL support populating `EvalRunResult` retrospectively for `goa-sof
 - **Given** this epic adds curated data and a schema amendment, but no new HTTP route
 - **When** deciding whether to redeploy
 - **Then** no redeploy is needed — same reasoning as epic 2b
+
+## Epic 4 — report generator + trend persistence
+
+Extends epic 2b's minimal report, not a rewrite. Scoped to the report/trend *mechanism*; running
+a fresh live Tier A benchmark and tying it to Tier B is epic 6's explicit job (FR-11) — not
+duplicated here.
+
+### FR-10 (completing it) — distinguish confidence levels in the report
+
+The product brief's own constraint: Tier B "should not be represented as equivalent-confidence
+data to Tier A in any report." Epic 2b's `RunReport` had no field capturing this at all.
+
+- **Given** a dogfood run (this harness's own real telemetry) and a Tier B record (evidence-based)
+- **When** both appear in the same report
+- **Then** each `RunReport` carries `confidence: 'live' | 'retrospective'` — dogfood telemetry is
+  `'live'` (real, observed), Tier B records are `'retrospective'` (evidence-based, per FR-4) —
+  so a reader can never mistake one for the other
+
+### FR-9 — persist EvalRunResult and scorecard data over time, versioned
+
+The system SHALL persist `EvalRunResult` and scorecard data over time, versioned, to support
+trend comparison across runs — not just a single snapshot.
+
+- **Given** a report generated today, and another generated after a later epic ships
+- **When** history is inspected
+- **Then** both generations are present in `docs/reports/history.json` — an append-only log, not
+  an overwritten snapshot
+- **Given** a fresh repo with no prior history file
+- **When** a report is first generated
+- **Then** history starts as an empty array and gains one entry, not an error
+- **Given** the same report content generated twice in a row (no new runs shipped between)
+- **When** appended
+- **Then** both entries are still recorded — deduplication is not this epic's job; a reader can
+  see "nothing changed between these two generations" as a real, informative trend signal
+
+### Post-deploy smoke scenario (epic 4's own Ship stage)
+
+- **Given** this epic touches only report generation and a history file, no new HTTP route
+- **When** deciding whether to redeploy
+- **Then** no redeploy is needed — same reasoning as epic 2b/3

@@ -70,3 +70,13 @@ to detect after the fact (the FAC-S4-019 lesson from `AI-ORCHESTRATION-LAYER-DES
   citation in `evidence`, keyed by field path (e.g. `"overall.security_gate_passed"`), so a
   disputed value audits back to the source document rather than resting on an unstated judgment
   call.
+
+## Epic 4
+
+- **Confidence** — `'live' | 'retrospective'`, a new field on `RunReport`. `'live'` means real,
+  observed telemetry (this harness's own dogfood runs); `'retrospective'` means evidence-based
+  (a `TierBRecord`). Directly operationalizes the product brief's own constraint that Tier B
+  "should not be represented as equivalent-confidence data to Tier A in any report."
+- **History** — the append-only log at `docs/reports/history.json`: an array of past `Report`
+  generations, oldest first. Never overwritten, never deduplicated — FR-9's trend-persistence
+  mechanism. Distinct from the single-snapshot `Report` file, which stays the latest view.

@@ -83,3 +83,21 @@ packages/ai-factory-kaizen/src/adapters/tier-b/
 
 No report integration yet — folding Tier A and Tier B together into one report is epic 6's
 explicit job ("tying Tier A and Tier B together," FR-11), not duplicated here.
+
+## Epic 4 — report generator + trend persistence
+
+```
+packages/ai-factory-kaizen/src/report/
+  build-report.ts     # AMENDED: buildReport(inputs: RunInput[], generatedAt) — RunInput pairs
+                       #   an EvalRunResult with its confidence ('live' | 'retrospective');
+                       #   RunReport gains a confidence field (FR-10 completion)
+  history.ts            # appendToHistory(report, historyPath) -> Report[] (FR-9); append-only,
+                        #   no dedup (Article 5 — that judgment isn't this epic's stated scope)
+  generate-dogfood-report.ts   # AMENDED: includes dogfood telemetry (confidence: 'live') AND
+                                #   the three Tier B records (confidence: 'retrospective') in
+                                #   the same report, then appends it to history.json
+```
+
+Signature change to `buildReport` is a deliberate, justified amendment (epic 2b said this epic
+would extend it, not a silent break) — `confidence` didn't exist as a concept until this epic's
+own FR-10 scenario needed it.

@@ -52,8 +52,8 @@
         "FR-9",
         "FR-10"
       ],
-      "status": "pending",
-      "stage": null,
+      "status": "in-progress",
+      "stage": "spec",
       "note": "FR-10's minimal report shape was already built in epic-2b against dogfood data; this epic extends it with FR-9 trend persistence and wires in real Tier A/B data."
     },
     {
