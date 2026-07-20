@@ -63,8 +63,8 @@
         "FR-6",
         "FR-8"
       ],
-      "status": "pending",
-      "stage": null
+      "status": "in-progress",
+      "stage": "spec"
     },
     {
       "id": "epic-6-benchmark-and-demo",
@@ -77,7 +77,6 @@
     }
   ],
   "openClarifications": [
-    "par-threshold values (FR-7)",
-    "judge-panel model/provider (FR-6)"
+    "par-threshold values (FR-7)"
   ]
 }

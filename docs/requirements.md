@@ -255,3 +255,60 @@ trend comparison across runs — not just a single snapshot.
 - **Given** this epic touches only report generation and a history file, no new HTTP route
 - **When** deciding whether to redeploy
 - **Then** no redeploy is needed — same reasoning as epic 2b/3
+
+## Epic 5 — judge-panel mechanism + maintainability scorecard
+
+`[NEEDS CLARIFICATION: judge-panel model/provider — resolved here]`. This harness has already
+run the exact mechanism FR-6 asks for, four epics running: an isolated reviewer subagent (fresh
+context, diff + criteria only) whose structured verdict is tallied deterministically by
+`review.mjs`, never a bare self-report. FR-6 generalizes that proven pattern from harness-internal
+tooling into a reusable product capability. Model/provider is deliberately not pinned to one
+vendor at the type level — a `JudgeVerdict` is provider-agnostic; *how* a verdict is produced
+(which model, which prompt) is the caller's concern, matching FR-6's own "judging can be
+LLM-based; the aggregation across judges is not."
+
+### FR-6 — judge-panel mechanism for qualitative dimensions
+
+The system SHALL support an optional judge-panel mechanism for qualitative dimensions that pure
+mechanical checks can't resolve, requiring multiple independent judges and a deterministic tally
+— never a single self-graded verdict feeding directly into the pass/fail decision.
+
+- **Given** multiple independent judges' verdicts on the same subject
+- **When** tallied
+- **Then** the result is a deterministic function of all verdicts (e.g. majority) — the same
+  input list always produces the same consensus, no model call inside the tally itself
+- **Given** exactly one verdict
+- **When** tallied
+- **Then** it is rejected — `[NEEDS CLARIFICATION]`'s own "don't grade your own homework" logic
+  requires *multiple* independent judges; a panel of one is not a panel
+- **Given** a tied panel (e.g. 1 pass, 1 fail)
+- **When** tallied
+- **Then** the tie is resolved by a stated, documented rule (fail-closed: a tie does not pass),
+  not left ambiguous
+
+### FR-8 — maintainability scorecard, separate from the delivery-function score
+
+The system SHALL maintain a maintainability/improvement scorecard, computed and reported
+separately from the delivery-function score, based on: Keystone's five stated concerns (Context,
+Constraints, Verification, Recovery, Feedback), process/adapter-separation cleanliness (verified,
+not claimed), and whether the process/adapter contract is enforced or merely a convention.
+
+- **Given** judge-panel verdicts for the five concerns (a judgment call, per FR-6)
+- **When** a scorecard is assembled
+- **Then** it never blends into `EvalRunResult`'s own score — a separate type, never merged into
+  one number with delivery-function metrics
+- **Given** this project's own `adapters/*` modules
+- **When** process/adapter-separation cleanliness is checked
+- **Then** it's a real, deterministic scan (do all adapters import `EvalRunResult` from
+  `domain/`, or does any adapter locally redefine/duplicate that shape) — "verified concretely,"
+  not a claimed/asserted boolean with no evidence
+- **Given** the same scan
+- **When** judging "enforced vs. convention"
+- **Then** TypeScript's own compile-time type checking on the shared import *is* the enforcement
+  mechanism here — a real answer specific to this codebase, not a generic yes/no
+
+### Post-deploy smoke scenario (epic 5's own Ship stage)
+
+- **Given** this epic adds judge-panel/scorecard types and a deterministic scan, no HTTP route
+- **When** deciding whether to redeploy
+- **Then** no redeploy is needed — same reasoning as epic 2b/3/4

@@ -101,3 +101,22 @@ packages/ai-factory-kaizen/src/report/
 Signature change to `buildReport` is a deliberate, justified amendment (epic 2b said this epic
 would extend it, not a silent break) — `confidence` didn't exist as a concept until this epic's
 own FR-10 scenario needed it.
+
+## Epic 5 — judge-panel mechanism + maintainability scorecard
+
+```
+packages/ai-factory-kaizen/src/judge-panel/
+  types.ts    # JudgeVerdict, PanelResult (FR-6)
+  tally.ts     # tallyPanel(verdicts: JudgeVerdict[]) -> PanelResult; deterministic, rejects a
+               #   panel of <2 verdicts, ties fail closed
+packages/ai-factory-kaizen/src/scorecard/
+  types.ts               # MaintainabilityScorecard, Concern, ProcessAdapterSeparation (FR-8)
+  process-adapter-separation.ts   # checkProcessAdapterSeparation(srcDir) -> ProcessAdapterSeparation;
+                                    #   scans adapters/*/*.ts for EvalRunResult import vs. local
+                                    #   redefinition — a real scan of this repo, not a generic claim
+```
+
+No code dispatches judge subagents — that's an agent-in-the-loop operation exactly like the
+Keystone adapter's build half (epic 2) and this harness's own `ship` skill's Review stage: the
+tally is code, producing the verdicts is a live judgment call, done by whoever operates this at
+the point they need it.

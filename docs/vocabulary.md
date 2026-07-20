@@ -87,3 +87,23 @@ to detect after the fact (the FAC-S4-019 lesson from `AI-ORCHESTRATION-LAYER-DES
   doc), so a reader inspecting the JSON artifact cold, without the source tree, can still tell
   `'live'` from `'retrospective'` and knows a retrospective entry's timestamp is a placeholder,
   not a real observation instant (review finding, epic 4).
+
+## Epic 5
+
+- **JudgeVerdict** — one independent judge's structured verdict on a subject: `{ judge: string,
+  verdict: 'pass' | 'fail', evidence: string }`. Provider-agnostic by design — FR-6 doesn't pin
+  a model/vendor at the type level; only the tally (below) is closed.
+- **PanelResult** — the deterministic tally of ≥2 `JudgeVerdict`s: `{ consensus: 'pass' | 'fail',
+  verdicts: JudgeVerdict[] }`. A tie fails closed (never passes on a tie). Rejects a panel of
+  fewer than two verdicts outright — "don't grade your own homework" requires *multiple*
+  independent judges, not one.
+- **MaintainabilityScorecard** — `{ concerns: Record<Concern, PanelResult>,
+  processAdapterSeparation: ProcessAdapterSeparation }`. Never blended into `EvalRunResult` or
+  any delivery-function score — a separate type, reported separately, per FR-8's own wording.
+- **Concern** — one of Keystone's five stated concerns: `'context' | 'constraints' |
+  'verification' | 'recovery' | 'feedback'`.
+- **ProcessAdapterSeparation** — `{ verified: boolean, enforced: boolean, evidence: string[] }`.
+  Deterministic, not judge-panel-based: a real scan of this project's own `adapters/*` modules
+  for domain-type reuse vs. local redefinition. `enforced` is `true` here specifically because
+  TypeScript's compile-time type checking on the shared `EvalRunResult` import *is* the
+  enforcement mechanism in this codebase — not a generic claim.
