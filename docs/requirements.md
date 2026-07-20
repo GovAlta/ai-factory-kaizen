@@ -206,8 +206,8 @@ The system SHALL support populating `EvalRunResult` retrospectively for `goa-sof
 ## Epic 4 — report generator + trend persistence
 
 Extends epic 2b's minimal report, not a rewrite. Scoped to the report/trend *mechanism*; running
-a fresh live Tier A benchmark and tying it to Tier B is epic 6's explicit job (FR-11) — not
-duplicated here.
+a fresh live Tier A benchmark and tying it to Tier B is a later epic's explicit job (see
+`.claude/epics.json`) — not duplicated here.
 
 ### FR-10 (completing it) — distinguish confidence levels in the report
 
