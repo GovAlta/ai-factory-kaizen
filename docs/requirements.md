@@ -312,3 +312,54 @@ not claimed), and whether the process/adapter contract is enforced or merely a c
 - **Given** this epic adds judge-panel/scorecard types and a deterministic scan, no HTTP route
 - **When** deciding whether to redeploy
 - **Then** no redeploy is needed — same reasoning as epic 2b/3/4
+
+## Epic 6 — benchmark spec fixtures + end-to-end demo
+
+**Scope split, stated up front rather than discovered mid-epic**: FR-11's fixtures and the
+report-combining mechanism are independently buildable now. Actually *running* a fixture through
+Keystone's live `eval-capability` (a real Tier A execution) is the exact deferred step from epic
+2 — dispatching a builder subagent is a genuine agent-in-the-loop operation with real time/cost,
+carved out then for separate, explicit authorization. This epic does not silently skip that
+carve-out or silently spend the cost — it builds everything else and asks before that one step.
+
+### FR-11 — held-out benchmark spec fixtures
+
+The system SHALL support at least 2–3 held-out benchmark specs modeled on patterns already
+analyzed in depth in this research.
+
+- **Given** `nx-tools/UX-VIEW-PATTERNS-SPEC.md` (read in full for this epic, not summarized from
+  memory)
+- **When** a fixture is curated
+- **Then** it's a workspace-view + intake-view combination, FR-tagged from that document's own
+  recommended defaults (server-side pagination, explicit column-sort, `goa-error-summary` on
+  every step, the always-show-confirmation resolution, etc.) — not invented from scratch
+- **Given** `AI-ORCHESTRATION-LAYER-DESIGN.md`'s own description of the FAC-S4-019 finding
+  (`fac_s4_runner.py` itself is not accessible in this environment — cited secondhand,
+  honestly, not presented as a primary-source read)
+- **When** a second fixture is curated
+- **Then** it's a small CRUD service whose acceptance criteria test whether a typed query
+  builder eliminates the SQL-column-drift class of check structurally, rather than needing a
+  detector for it — the same "correctness by construction" framing the source document uses
+- **Given** either fixture
+- **When** inspected
+- **Then** it carries a `sourceDoc` citation, matching the provenance discipline already
+  established for `TierBRecord` (epic 3) — a fixture's origin is auditable, not asserted
+
+### End-to-end demo — tying Tier A and Tier B together
+
+- **Given** this harness's own live dogfood telemetry (`confidence: 'live'`) and the three Tier B
+  records (`confidence: 'retrospective'`)
+- **When** combined into one report
+- **Then** the mechanism epic 4 built already handles both tiers correctly in one artifact — this
+  epic's demo is proving that claim concretely against the full, final set of shipped epics, not
+  building new combining logic
+- **Given** the two new benchmark fixtures
+- **When** a real Tier A run against Keystone is *not* triggered in this epic
+- **Then** the fixtures are still real, valid, reusable artifacts — ready the moment that
+  separate, explicitly-authorized step happens, not blocked on it
+
+### Post-deploy smoke scenario (epic 6's own Ship stage)
+
+- **Given** this epic adds fixture data and a demo report regeneration, no new HTTP route
+- **When** deciding whether to redeploy
+- **Then** no redeploy is needed — same reasoning as epic 2b/3/4/5

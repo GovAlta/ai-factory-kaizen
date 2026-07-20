@@ -72,8 +72,8 @@
       "frs": [
         "FR-11"
       ],
-      "status": "pending",
-      "stage": null
+      "status": "in-progress",
+      "stage": "spec"
     }
   ],
   "openClarifications": [

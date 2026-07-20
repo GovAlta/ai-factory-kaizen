@@ -120,3 +120,18 @@ No code dispatches judge subagents — that's an agent-in-the-loop operation exa
 Keystone adapter's build half (epic 2) and this harness's own `ship` skill's Review stage: the
 tally is code, producing the verdicts is a live judgment call, done by whoever operates this at
 the point they need it.
+
+## Epic 6 — benchmark spec fixtures + end-to-end demo
+
+```
+packages/ai-factory-kaizen/src/benchmarks/
+  types.ts     # BenchmarkSpecFixture (FR-11)
+  fixtures.ts   # the two curated fixtures, hand-written and cited like TierBRecord — not
+                #   parsed from the source docs, since distilling a design doc into a held-out
+                #   spec is the same kind of one-time interpretive act as Tier B's curation
+```
+
+`generate-dogfood-report.ts` is re-run as this epic's demo, unmodified — proving epic 4's
+combining mechanism against the full, final set of shipped epics rather than building new logic.
+No code triggers a live Keystone run — that remains the separate, explicitly-authorized step
+carved out in epic 2.

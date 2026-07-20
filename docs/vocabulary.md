@@ -107,3 +107,10 @@ to detect after the fact (the FAC-S4-019 lesson from `AI-ORCHESTRATION-LAYER-DES
   for domain-type reuse vs. local redefinition. `enforced` is `true` here specifically because
   TypeScript's compile-time type checking on the shared `EvalRunResult` import *is* the
   enforcement mechanism in this codebase — not a generic claim.
+
+## Epic 6
+
+- **BenchmarkSpecFixture** — `{ id, title, sourceDoc, frNfrs: string[], spec: string,
+  acceptanceCriteria: string[] }`. A held-out spec a harness could be asked to build to, per
+  FR-11. `sourceDoc` is a real citation, matching `TierBRecord`'s provenance discipline — a
+  fixture's origin is auditable, never asserted without a traceable source.
