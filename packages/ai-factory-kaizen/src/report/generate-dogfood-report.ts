@@ -13,12 +13,15 @@ const TELEMETRY_DIR = resolve(process.cwd(), '.claude/telemetry');
 const OUTPUT_PATH = resolve(process.cwd(), 'docs/reports/dogfood-self-eval.json');
 const HISTORY_PATH = resolve(process.cwd(), 'docs/reports/history.json');
 
-// Every currently-shipped epic — extended as later epics ship (docs/plan.md).
+// Every currently-shipped epic — extended as later epics ship (docs/plan.md). epic-6 itself is
+// omitted: its own telemetry isn't finalized until after this same ship run completes.
 const SHIPPED_EPIC_IDS = [
   'epic-1-walking-skeleton',
   'epic-2-keystone-adapter',
   'epic-2b-dogfood-self-eval',
   'epic-3-tier-b-adapter',
+  'epic-4-report-and-trend',
+  'epic-5-judge-panel-and-scorecard',
 ];
 
 function main() {
