@@ -131,7 +131,8 @@ packages/ai-factory-kaizen/src/benchmarks/
                 #   spec is the same kind of one-time interpretive act as Tier B's curation
 ```
 
-`generate-dogfood-report.ts` is re-run as this epic's demo, unmodified — proving epic 4's
-combining mechanism against the full, final set of shipped epics rather than building new logic.
-No code triggers a live Keystone run — that remains the separate, explicitly-authorized step
-carved out in epic 2.
+`generate-dogfood-report.ts` is re-run as this epic's demo — its *combining logic* is unmodified
+(no new function, no new report shape), only its `SHIPPED_EPIC_IDS` list grows, exactly as its
+own pre-existing comment anticipates ("extended as later epics ship"). Proves epic 4's mechanism
+against the full, final set of shipped epics rather than building new logic. No code triggers a
+live Keystone run — that remains the separate, explicitly-authorized step carved out in epic 2.
