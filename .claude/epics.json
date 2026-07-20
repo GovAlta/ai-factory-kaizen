@@ -63,8 +63,8 @@
         "FR-6",
         "FR-8"
       ],
-      "status": "in-progress",
-      "stage": "ship"
+      "status": "shipped",
+      "stage": "done"
     },
     {
       "id": "epic-6-benchmark-and-demo",
